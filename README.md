@@ -23,3 +23,5 @@ il faut regarder historique chagpt pour les commandes
 4) dans ce repository on a crée le fichier inventory(on met dedans les adresses destinations)
 5) on fait un ping avec cette commande : 
 ansible all --key-file ~/.ssh/ansible -i inventory -m ping 
+6) on crée un fichier ansible.cfg on configure dedans le inventory et la cle ssh pour minimiser la commande ping : ansible all -m ping 
+
