@@ -1,4 +1,8 @@
-192.168.10.10
-192.168.10.20
-192.168.20.10
-192.168.20.20
+[site1]
+machine11 ansible_host=192.168.10.10
+machine12 ansible_host=192.168.10.20
+
+[site2]
+machine21 ansible_host=192.168.20.10
+machine22 ansible_host=192.168.20.20
+
