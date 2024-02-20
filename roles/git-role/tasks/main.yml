@@ -1,0 +1,25 @@
+---
+
+- name: Install Git
+  become: true
+  apt:
+    name: git
+    state: present
+
+- name: Ensure Git is installed
+  stat:
+    path: /usr/bin/git
+  register: git_check
+
+- name: Create user-specific Git directory
+  file:
+    path: "/home/hadil/my-git-repo"
+    state: directory
+  when: git_check.stat.exists
+
+- name: Set user-specific Git path
+  lineinfile:
+    path: "/home/hadil/.bashrc"
+    line: 'export PATH=$PATH:/usr/bin/git'
+  when: git_check.stat.exists
+
