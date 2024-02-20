@@ -1,0 +1,7 @@
+---
+- name: Deploy Git
+  hosts: all
+  become: true
+
+  roles:
+    - role: git-role
