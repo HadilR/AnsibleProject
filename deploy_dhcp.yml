@@ -1,0 +1,13 @@
+---
+
+- name: Configure DHCP Servers for site1
+  hosts: site1
+  become: yes
+  roles:
+    - dhcp
+
+- name: Configure DHCP Servers for site2
+  hosts: site2
+  become: yes
+  roles:
+    - dhcp
