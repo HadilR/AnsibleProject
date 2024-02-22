@@ -1,0 +1,30 @@
+- name: Install WireGuard
+  apt:
+    name: wireguard
+    state: present
+
+- name: Generate WireGuard keys
+  command: wg genkey
+  register: private_key
+  changed_when: false
+
+- name: Save private key to hostvars
+  copy:
+    dest: "/etc/wireguard/privatekey"
+    content: "{{ private_key.stdout }}"
+    mode: '0600'
+  notify: Restart WireGuard
+
+- name: Generate WireGuard public key
+  shell: wg pubkey
+  args:
+    stdin: "{{ private_key.stdout }}"
+  register: public_key
+  changed_when: false
+
+- name: Set up WireGuard configuration
+  template:
+    src: wireguard.conf.j2
+    dest: "/etc/wireguard/wg0.conf"
+  notify: Apply and Restart WireGuard
+

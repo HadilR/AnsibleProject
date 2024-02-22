@@ -1,0 +1,15 @@
+[Interface]
+Address = {{ machine_addresses[inventory_hostname] }}/24
+PrivateKey = {{ private_key.stdout }}
+ListenPort = {{ port_vpn }}
+
+{% for host in groups['all'] %}
+{% if host != inventory_hostname %}
+[Peer]
+# {{ hostvars[host].inventory_hostname }}
+PublicKey = {{ hostvars[host]['public_key'].stdout.strip() }}
+Endpoint = {{ hostvars[host]['ansible_host'] }}:{{ port_vpn }}
+AllowedIPs = {{ machine_addresses[host] }}/32
+{% endif %}
+{% endfor %}
+

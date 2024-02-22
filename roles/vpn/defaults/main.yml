@@ -1,0 +1,8 @@
+subnet_vpn: 10.0.8.0/24
+machine_addresses:
+  machine11: 10.0.8.11
+  machine12: 10.0.8.12
+  machine21: 10.0.8.21
+  machine22: 10.0.8.22
+port_vpn: 51111
+
