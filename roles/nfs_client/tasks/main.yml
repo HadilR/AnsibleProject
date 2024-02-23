@@ -1,0 +1,107 @@
+- name: Install NFS packages for clients
+  apt:
+    name: nfs-common
+    state: latest
+
+- name: Create mount point /mnt/public
+  file:
+    path: "/mnt/public"
+    state: directory
+  become: true
+  ignore_errors: yes
+
+- name: Check if /mnt/public is a mount point
+  command: mountpoint -q "/mnt/public"
+  register: is_mountpoint
+  changed_when: false
+  failed_when: false
+
+- name: Unmount /mnt/public if it's a mount point
+  command: umount "/mnt/public"
+  when: is_mountpoint.rc == 0
+  become: yes
+
+- name: Remove /mnt/public directory
+  file:
+    path: "/mnt/public"
+    state: absent
+  become: yes
+
+- name: Mount the public share
+  mount:
+    path: "/mnt/public"
+    src: "10.0.8.11:/srv/nfs/public"
+    fstype: nfs
+    opts: "defaults"
+    state: mounted
+  become: true
+  ignore_errors: yes
+
+- name: Create mount points for private shares of machine12
+  file:
+    path: "/mnt/private/{{ item.user }}"
+    state: directory
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine12' in inventory_hostname and '10.0.8.12/32' in item.network"
+
+- name: Create mount points for private shares of machine21
+  file:
+    path: "/mnt/private/{{ item.user }}"
+    state: directory
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine21' in inventory_hostname and '10.0.8.21/32' in item.network"
+
+- name: Create mount points for private shares of machine22
+  file:
+    path: "/mnt/private/{{ item.user }}"
+    state: directory
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine22' in inventory_hostname and '10.0.8.22/32' in item.network"
+
+- name: Mount private shares for users of machine12
+  mount:
+    path: "/mnt/private/{{ item.user }}"
+    src: "10.0.8.11:/srv/nfs/{{ item.path }}{% if item.user %}/{{ item.user }}{% endif %}"
+    fstype: nfs
+    opts: "defaults"
+    state: mounted
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine12' in inventory_hostname and '10.0.8.12/32' in item.network"
+
+- name: Mount private shares for users of machine21
+  mount:
+    path: "/mnt/private/{{ item.user }}"
+    src: "10.0.8.11:/srv/nfs/{{ item.path }}{% if item.user %}/{{ item.user }}{% endif %}"
+    fstype: nfs
+    opts: "defaults"
+    state: mounted
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine21' in inventory_hostname and '10.0.8.21/32' in item.network"
+
+- name: Mount private shares for users of machine22
+  mount:
+    path: "/mnt/private/{{ item.user }}"
+    src: "10.0.8.11:/srv/nfs/{{ item.path }}{% if item.user %}/{{ item.user }}{% endif %}"
+    fstype: nfs
+    opts: "defaults"
+    state: mounted
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine22' in inventory_hostname and '10.0.8.22/32' in item.network"
