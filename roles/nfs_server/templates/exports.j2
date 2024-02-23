@@ -1,0 +1,5 @@
+{% for export in nfs_server_exports %}
+/srv/nfs/{{ export.path }}{% if export.user %}/{{ export.user }}{% endif %} {{ export.network }}(rw,sync,no_subtree_check)
+{% endfor %}
+
+

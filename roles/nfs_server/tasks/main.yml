@@ -1,0 +1,34 @@
+- name: Install NFS packages for server
+  apt:
+    name:
+      - nfs-kernel-server
+      - nfs-common
+    state: latest
+  become: true
+
+- name: Create /etc/exports.d directory
+  file:
+    path: "/etc/exports.d"
+    state: directory
+  become: true
+
+- name: Create NFS directories on server for users and public
+  file:
+    path: "/srv/nfs/{{ item.path }}{% if item.user %}/{{ item.user }}{% endif %}"
+    state: directory
+    mode: '0777'
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+
+- name: Configure NFS exports on server for users and public
+  template:
+    src: exports.j2
+    dest: "/etc/exports.d/{{ item.user | default('public') }}.exports"
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  notify: Restart NFS
+  become: true
+
