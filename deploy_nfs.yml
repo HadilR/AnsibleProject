@@ -1,0 +1,19 @@
+---
+
+- name: Deploy NFS Server
+  hosts: machine11
+  become: true
+  vars_files:
+    - "nfs_vars/export_public.yml"
+
+  roles:
+    - nfs_server
+
+- name: Mount NFS Shares on Clients
+  hosts: "all:!machine11"
+  become: true
+  vars_files:
+     - "nfs_vars/export_public.yml"
+
+  roles:
+    - nfs_client
