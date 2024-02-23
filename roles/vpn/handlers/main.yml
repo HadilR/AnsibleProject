@@ -1,5 +1,5 @@
 - name: Apply and Restart WireGuard
-  command: "sudo wg-quick up wg0"
+  command: "sudo wg-quick down wg0"
   async: 300
   poll: 0
   ignore_errors: true
