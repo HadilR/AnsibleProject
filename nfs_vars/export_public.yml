@@ -1,0 +1,29 @@
+nfs_server_exports:
+  - user: public
+    path: "public"
+    network: "10.0.8.0/24"
+
+  - user: "root"
+    path: "private"
+    network: "10.0.8.12/32"
+
+  - user: "hadil"
+    path: "private"
+    network: "10.0.8.12/32"
+
+  - user: "root"
+    path: "private"
+    network: "10.0.8.21/32"
+
+  - user: "hadil"
+    path: "private"
+    network: "10.0.8.21/32"
+
+  - user: "root"
+    path: "private"
+    network: "10.0.8.22/32"
+
+  - user: "hadil"
+    path: "private"
+    network: "10.0.8.22/32"
+
