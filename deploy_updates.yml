@@ -1,0 +1,12 @@
+---
+
+- name: Update all systems individually
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update each machine
+      include_role:
+        name: update_system
+      loop: "{{ groups['all'] }}"
+
