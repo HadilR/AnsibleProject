@@ -1,4 +1,4 @@
-- name: restart isc-dhcp-server
+- name: Restart dhcp server
   service:
     name: isc-dhcp-server
     state: restarted

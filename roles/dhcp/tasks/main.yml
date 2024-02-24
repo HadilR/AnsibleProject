@@ -3,16 +3,16 @@
     name: isc-dhcp-server
     state: present
 
-- name: Set up dhcpd.conf
+- name: Configure dhcpd
   template:
     src: dhcpd.conf.j2
     dest: /etc/dhcp/dhcpd.conf
-  notify: restart isc-dhcp-server
+  notify: Restart dhcp server
 
-- name: Configure INTERFACESv4
+- name: Configure dhcp interface
   lineinfile:
     path: /etc/default/isc-dhcp-server
     regexp: '^INTERFACESv4='
     line: 'INTERFACESv4="{{ dhcp_interface }}"'
     create: yes
-  notify: restart isc-dhcp-server
+  notify: Restart dhcp server
