@@ -10,7 +10,7 @@
     - nfs_server
 
 - name: Mount NFS Shares on Clients
-  hosts: "all:!machine11"
+  hosts: "all"
   become: true
   vars_files:
      - "nfs_vars/export_public.yml"
