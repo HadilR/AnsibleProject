@@ -37,6 +37,16 @@
   become: true
   ignore_errors: yes
 
+- name: Create mount points for private shares of machine11
+  file:
+    path: "/mnt/private/{{ item.user }}"
+    state: directory
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine11' in inventory_hostname and '10.0.8.11/32' in item.network"
+
 - name: Create mount points for private shares of machine12
   file:
     path: "/mnt/private/{{ item.user }}"
@@ -66,6 +76,19 @@
     loop_var: item
   become: true
   when: "'machine22' in inventory_hostname and '10.0.8.22/32' in item.network"
+
+- name: Mount private shares for users of machine11
+  mount:
+    path: "/mnt/private/{{ item.user }}"
+    src: "10.0.8.11:/srv/nfs/{{ item.path }}{% if item.user %}/{{ item.user }}{% endif %}"
+    fstype: nfs
+    opts: "defaults"
+    state: mounted
+  loop: "{{ nfs_server_exports }}"
+  loop_control:
+    loop_var: item
+  become: true
+  when: "'machine11' in inventory_hostname and '10.0.8.11/32' in item.network"
 
 - name: Mount private shares for users of machine12
   mount:
