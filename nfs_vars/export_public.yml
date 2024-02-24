@@ -5,6 +5,14 @@ nfs_server_exports:
 
   - user: "root"
     path: "private"
+    network: "10.0.8.11/32"
+
+  - user: "hadil"
+    path: "private"
+    network: "10.0.8.11/32"
+
+  - user: "root"
+    path: "private"
     network: "10.0.8.12/32"
 
   - user: "hadil"
