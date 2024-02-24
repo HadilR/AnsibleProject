@@ -1,32 +1,32 @@
 ---
 
-- name: Install BIND DNS Server
+- name: Install DNS Server
   apt:
     name: bind9
     state: present
 
-- name: Deploy named.conf.options
+- name: Configure named options
   template:
     src: named.conf.options.j2
     dest: /etc/bind/named.conf.options
-  notify: restart bind9
+  notify: Restart bind9
 
-- name: Deploy named.conf.local
+- name: Configure named local
   template:
     src: named.conf.local.j2
     dest: /etc/bind/named.conf.local
-  notify: restart bind9
+  notify: Restart bind9
 
-- name: Configure DNS Zone for Site 1
+- name: Configure Site 1 Zone
   template:
     src: db.site1.j2
     dest: /etc/bind/db.site1
   when: inventory_hostname in groups['site1']
-  notify: restart bind9
+  notify: Restart bind9
 
-- name: Configure DNS Zone for Site 2
+- name: Configure Site 2 Zone
   template:
     src: db.site2.j2
     dest: /etc/bind/db.site2
   when: inventory_hostname in groups['site2']
-  notify: restart bind9
+  notify: Restart bind9
