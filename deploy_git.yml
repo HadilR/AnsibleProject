@@ -1,7 +1,7 @@
 ---
-- name: Deploy Git
+- name: Deploy Gitea
   hosts: all
   become: true
 
   roles:
-    - role: git-role
+    - gitea
