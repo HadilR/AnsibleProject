@@ -1,27 +1,13 @@
-# AnsibleProject
+# Déploiement automatique avec Ansible et Kubernetes
 
-1) Set up de l'environnement :
+## Introduction
 
-creation de deux sous reseaux: intnet et intnet2
-1er sous-reseau : vm-ansible (server base)   192.168.10.101
-			      vm1-1   192.168.10.10
-			      vm1-2   192.168.10.20
+Ce projet vise à explorer deux outils modernes, largement utilisés par les administrateurs système, pour déployer un réseau de manière automatisée. Ces outils, Ansible et Kubernetes, trouvent leur place dans l'industrie pour le développement et les tests. La première partie du projet se concentre sur le déploiement automatique avec Ansible dans un environnement Linux natif, excluant l'utilisation de conteneurs. La seconde partie offre une rapide immersion dans Kubernetes, un puissant gestionnaire de conteneurs Docker flexible et en forte expansion.
 
-2eme sous-resau : vm2-1    192.168.20.10
-		  vm2-2    192.168.20.20
-dans chaque machine on doit installer openssh et python3
-Pour que la machine ansible peut communiquer avec internet (pour l'installation de ansible etc et aussi pour communiquer avec les autres machines de sous reseaux), on a crée un routeur :
-dans le routeur on a 4 interfaces : Nat (pour internet)
-				    192.168.10.1
-				    192.168.20.1
-on a configuré le nat pour laisser passer que le trafic de machine vm-ansible (forward & postrouting)
-il faut regarder historique chagpt pour les commandes
+## I - Ansible
 
-2) on connecte la machine ansible avec les autres machines via ssh (keys etc)
+Une start-up répartie sur deux sites géographiques doit concevoir et mettre en place son parc informatique. L'utilisation d'Ansible pour le déploiement automatique des services sur 4 machines virtuelles (2 par site) sous Debian est envisagée. Le projet s'inscrit dans une perspective d'automatisation maximale pour gérer efficacement des centaines de machines. Les besoins comprennent la mise en place de serveurs DHCP et DNS par site, un VPN pour interconnecter les deux sites, un NFS public et privé pour chaque utilisateur, un gestionnaire de dépôt Git, un serveur Apache, une authentification générale via LDAP, et une mise à jour globale des systèmes en une seule commande Ansible. L'objectif est de permettre l'ajout automatique d'un nœud dans le cluster avec quelques lignes de commandes Ansible.
 
-3) on a crée ce repository pour enregistrer notre travail
-4) dans ce repository on a crée le fichier inventory(on met dedans les adresses destinations)
-5) on fait un ping avec cette commande : 
-ansible all --key-file ~/.ssh/ansible -i inventory -m ping 
-6) on crée un fichier ansible.cfg on configure dedans le inventory et la cle ssh pour minimiser la commande ping : ansible all -m ping 
+## II - Découverte de Kubernetes
 
+La seconde partie du projet se consacre à la découverte de Kubernetes, un gestionnaire de conteneurs simplifiant le déploiement et la gestion d'un cluster, y compris la répartition de la charge. L'étude initiale portera sur l'utilisation générale de Kubernetes. Ensuite, nous déploierons 4 instances Nginx (serveur web) dans des conteneurs Docker en utilisant Kubernetes. Cette étape permettra de comprendre comment Kubernetes facilite la gestion de conteneurs dans un environnement distribué.
