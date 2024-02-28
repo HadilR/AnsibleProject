@@ -1,0 +1,5 @@
+# ldap_clients/files/ldap_pam_config.j2
+session required        pam_mkhomedir.so skel=/etc/skel/ umask=0077
+session required        pam_unix.so
+session optional        pam_ldap.so
+session required        pam_permit.so

@@ -1,0 +1,24 @@
+- name: Install LDAP packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - libpam-ldap
+    - nss-pam-ldapd
+    - ldap-utils
+    - libnss-ldapd
+
+- name: Copy LDAP client configuration
+  template:
+    src: ldap_client.conf.j2
+    dest: /etc/ldap/ldap.conf
+
+- name: Copy NSSwitch configuration
+  template:
+    src: nsswitch.conf.j2
+    dest: /etc/nsswitch.conf
+
+- name: Copy PAM configuration
+  template:
+    src: ldap_pam_config.j2
+    dest: /etc/pam.d/common-session

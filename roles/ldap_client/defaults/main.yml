@@ -1,0 +1,3 @@
+ldap_domain: "coffee.fr"
+ldap_server_host: "192.168.10.10"  # Adresse IP du serveur LDAP (machine11)
+ldap_heyhey_password: "Hadil260899"
