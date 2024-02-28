@@ -1,0 +1,15 @@
+dn: dc=coffee,dc=fr
+objectClass: top
+objectClass: dcObject
+objectclass: organization
+o: coffee.fr
+dc: coffee
+
+dn: ou=users,dc=coffee,dc=fr
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=coffee,dc=fr
+objectClass: organizationalUnit
+ou: groups
+

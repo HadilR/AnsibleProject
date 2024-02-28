@@ -1,0 +1,76 @@
+---
+
+- name: Install OpenLDAP
+  package:
+    name: slapd
+    state: present
+
+- name: Start and enable OpenLDAP service
+  service:
+    name: slapd
+    state: started
+    enabled: true
+
+- name: Copy slapd.conf file
+  copy:
+    src: slapd.conf
+    dest: /etc/ldap/slapd.conf
+  notify: restart slapd
+
+- name: Copy LDIF file for domain creation
+  copy:
+    src: domain.ldif
+    dest: /tmp/domain.ldif
+
+- name: Remove existing slapd.d directory
+  command: rm -rf /etc/ldap/slapd.d
+  ignore_errors: true
+
+- name: Create LDAP database using slaptest
+  command: slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d
+  notify: restart slapd
+
+- name: Apply LDIF to create domain
+  command: ldapadd -x -D cn=admin,dc=coffee,dc=fr -w "{{ ldap_admin_password }}" -f /tmp/domain.ldif
+  notify: restart slapd
+
+- name: Copy LDIF file for group creation
+  copy:
+    src: group.ldif
+    dest: /tmp/group.ldif
+
+- name: Apply LDIF to add group to LDAP
+  command: ldapadd -x -D cn=admin,{{ ldap_domain }} -w "{{ ldap_admin_password }}" -f /tmp/group.ldif
+  args:
+    executable: /bin/bash
+
+- name: Copy LDIF file for user creation
+  copy:
+    src: user.ldif
+    dest: /tmp/user.ldif
+
+- name: Set LDAP password for user "heyhey"
+  template:
+    src: user_password.ldif.j2
+    dest: /tmp/user_password.ldif
+  notify: Apply LDAP password for user "heyhey"
+
+- name: Apply LDAP password for user "heyhey"
+  command: ldapmodify -x -D cn=admin,{{ ldap_domain }} -w "{{ ldap_admin_password }}" -f /tmp/user_password.ldif
+  args:
+    executable: /bin/bash
+
+- name: Apply LDIF to add user to LDAP
+  command: ldapadd -x -D cn=admin,{{ ldap_domain }} -w "{{ ldap_admin_password }}" -f /tmp/user.ldif
+  args:
+    executable: /bin/bash
+
+- name: Copy LDAP server configuration
+  template:
+    src: ldap_server_config.ldif.j2
+    dest: /tmp/ldap_server_config.ldif
+
+- name: Apply LDAP server configuration
+  command: ldapmodify -x -D cn=admin,{{ ldap_domain }} -w "{{ ldap_admin_password }}" -f /tmp/ldap_server_config.ldif
+  args:
+    executable: /bin/bash

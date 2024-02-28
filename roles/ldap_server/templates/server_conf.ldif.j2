@@ -1,0 +1,10 @@
+dn: cn=config
+changetype: modify
+add: olcServerID
+olcServerID: {{ ldap_server_id }}
+
+dn: cn=config
+changetype: modify
+add: olcAccess
+olcAccess: to dn.subtree="ou=groups,dc=coffee,dc=fr" by * read
+olcAccess: to dn.subtree="ou=users,dc=coffee,dc=fr" by * read

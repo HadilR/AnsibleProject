@@ -1,0 +1,4 @@
+dn: cn=nerds,ou=groups,dc=coffee,dc=fr
+objectClass: top
+objectClass: posixGroup
+gidNumber: 1001
