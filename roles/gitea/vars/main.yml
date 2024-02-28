@@ -8,7 +8,7 @@ gitea_user: "{{ ansible_host }}"
 gitea_repo_private: true
 
 # Gitea version to download
-gitea_version: "1.15.5"
+gitea_version: "1.21.6"
 
 # Whether to create a Gitea user for each machine
 gitea_create_user: true
