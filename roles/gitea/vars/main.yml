@@ -1,20 +1,11 @@
----
-# File: roles/gitea/vars/main.yml
-
 # roles/gitea/vars/main.yml
 gitea_user: "{{ ansible_host }}"
-
-# roles/gitea/vars/main.yml
-gitea_repo_private: true
 
 # Gitea version to download
 gitea_version: "1.21.6"
 
 # Whether to create a Gitea user for each machine
 gitea_create_user: true
-
-# Whether to create a Gitea repository for each machine
-gitea_create_repo: true
 
 # User accounts for Gitea
 gitea_users:
