@@ -1,0 +1,15 @@
+# File: roles/gitea/tasks/create_user.yml
+
+# File: roles/gitea/tasks/create_user.yml
+
+- name: Create Gitea user
+  user:
+    name: "{{ item.name }}"
+    comment: "Gitea User - {{ item.name }}"
+    password: "{{ item.password | password_hash('sha512') }}"
+    shell: "/bin/bash"
+    system: false
+  loop: "{{ gitea_users }}"
+  when: gitea_create_user and item.name == inventory_hostname
+
+

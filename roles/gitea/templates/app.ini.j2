@@ -1,0 +1,46 @@
+# app.ini.j2
+
+APP_NAME = MonGitea
+RUN_USER = gitea
+RUN_MODE = prod
+HTTP_PORT = 80
+ROOT_URL = http://{{ ansible_host }}:3000/
+DISABLE_REGISTRATION = true
+SSH_DOMAIN       = {{ ansible_host }}
+SSH_PORT         = 22
+LFS_START_SERVER = true
+LFS_CONTENT_PATH = /opt/gitea/data/lfs
+# LFS_JWT_SECRET 
+
+[repository]
+ROOT = /opt/gitea-repositories
+
+[database]
+DB_TYPE  = sqlite3
+HOST     = 127.0.0.1:3306
+NAME     = gitea
+USER     = {{ inventory_hostname}}
+PASSWD   = "260899" 
+SSL_MODE = disable
+PATH     = /opt/gitea/data/gitea.db
+
+[mailer]
+ENABLED = false
+
+[service]
+REGISTER_EMAIL_CONFIRM = false
+
+[picture]
+DISABLE_GRAVATAR        = false
+
+[openid]
+ENABLE_OPENID_SIGNIN = false
+
+[session]
+PROVIDER = file
+
+[log]
+ROOT_PATH = /opt/gitea/log
+
+[security]
+INSTALL_LOCK   = false

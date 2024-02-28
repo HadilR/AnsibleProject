@@ -1,0 +1,78 @@
+---
+
+- include_vars: vars/main.yml
+
+- name: Install required packages
+  apt:
+    name:
+      - git
+      - sqlite3
+    state: present
+
+- name: Create Gitea user
+  user:
+    name: gitea
+    system: true
+
+- name: Create Gitea directory
+  file:
+    path: "/opt/gitea"
+    state: directory
+    owner: gitea
+    group: gitea
+    mode: "0755"
+
+- name: Download Gitea binary
+  stat:
+    path: "/opt/gitea/gitea"
+  register: gitea_binary
+
+- name: Download Gitea binary if not exists
+  get_url:
+    url: "https://dl.gitea.io/gitea/{{ gitea_version }}/gitea-{{ gitea_version }}-linux-amd64"
+    dest: "/opt/gitea/gitea"
+    mode: "0755"
+  when: not gitea_binary.stat.exists
+
+- name: Create Gitea configuration directory
+  file:
+    path: /opt/gitea/custom/conf
+    state: directory
+    owner: gitea
+    group: gitea
+    mode: "0755"
+
+- name: Copy Gitea configuration file
+  template:
+    src: app.ini.j2
+    dest: /opt/gitea/custom/conf/app.ini
+    owner: gitea
+    group: gitea
+    mode: "0644"
+
+- name: Create Gitea systemd service file
+  template:
+    src: gitea.service.j2
+    dest: /etc/systemd/system/gitea.service
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Reload systemd after creating the service file
+  systemd:
+    daemon_reload: yes
+
+- name: Enable and start Gitea service
+  systemd:
+    name: gitea
+    enabled: yes
+    state: started
+
+- name: Include role tasks
+  include_tasks: create_user.yml
+  when: gitea_create_user | default(true)
+
+- name: Clone Gitea repository
+  command: git clone https://gitea.com/HadilR/ansibleDepot.git
+  args:
+    chdir: "/home/hadil"

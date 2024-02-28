@@ -1,0 +1,9 @@
+---
+# File: roles/gitea/tasks/create_repo.yml
+- name: Create Gitea repository
+  command: gitea repo create --name={{ gitea_repo_name }} --private={{ gitea_repo_private | bool }} --owner={{ gitea_user }}
+  args:
+    chdir: /opt/gitea/gitea
+  become: yes
+  become_user: gitea
+
